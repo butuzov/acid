@@ -17,7 +17,7 @@ from os.path import splitext
 
 class Theme:
 
-    short = {
+    style_acronims = {
         'i': 'italic',
         'u': 'underline',
         'b': 'bold',
@@ -84,7 +84,7 @@ class Theme:
 
         # is this a fontStyle value?
         if all([True if i in 'ibun' else False for i in value]):
-            value = " ".join([self.short.get(i) for i in value])
+            value = " ".join([self.style_acronims.get(i) for i in value])
 
         if value in ("italic", "bold", "underline", "normal"):
             return value
@@ -171,26 +171,25 @@ class Theme:
             json.dump(theme, fp=f, indent=4)
 
     def unpack(self, value: str, redefined: dict) -> dict:
-        """ unpack short value e.g. `bui@black` to style and foreground """
+        """ unpack style_acronim value e.g. `bui@black` to style and foreground """
 
         if '@' in value:
             fontStyle, foreground = value.split("@")
-            redefined['foreground'] = self.pick(foreground)
-            redefined['fontStyle'] = self.pick(fontStyle)
+            redefined['foreground'] = foreground
+            redefined['fontStyle'] = fontStyle
         elif value:
             is_style = all([True if i in 'ibun' else False for i in value])
             name = ('foreground', 'fontStyle')[int(is_style)]
-            redefined[name] = self.pick(value)
-        else:
-            for name, value in redefined.items():
-                redefined[name] = self.pick(value)
+            redefined[name] = value
 
-        return redefined
+        return {k: self.pick(v) for k, v in redefined.items()}
 
     @staticmethod
     def random_color() -> str:
         """ generates random color (substitute for `_` )"""
-        return "#" + ''.join([choice('0123456789ABCDEF') for j in range(6)])
+
+        random_color_code = [choice('0123456789ABCDEF') for j in range(6)]
+        return "#" + ''.join(random_color_code)
 
     @staticmethod
     def read(file):
