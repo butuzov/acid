@@ -108,11 +108,12 @@ statusBarItem:
 # Tabs used for tabs descriptions
 tab:
   border: none
-  activeBackground: black
-  activeForeground: highBg
-  activeBorder: black
+  activeBackground: dark
+  activeForeground: white
+  activeBorder: white
   activeBorderTop: black
-  activeModifiedBorder: black
+  activeModifiedBorder: highBg
+
   hoverBackground: black
   hoverBorder: black
   hoverForeground: yellow
